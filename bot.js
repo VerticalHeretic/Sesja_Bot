@@ -10,7 +10,7 @@ const fs = require('fs')
 let points = JSON.parse(fs.readFileSync("./points.json", "utf-8"));
 
 // CONSTANTS 
-const 
+
 const replies = [
     "The Force will be with you. Always. ✨ ",
     "“I find your lack of faith disturbing. 🤖 ",
