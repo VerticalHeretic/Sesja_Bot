@@ -1,0 +1,23 @@
+{
+  "name": "sesja_bot",
+  "version": "0.0.1",
+  "description": "Discord bot to manage studies",
+  "main": "bot.js",
+  "scripts": {
+    "start" : "node bot.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/LSWarss/Sesja_Bot.git"
+  },
+  "author": "LSWarss",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/LSWarss/Sesja_Bot/issues"
+  },
+  "homepage": "https://github.com/LSWarss/Sesja_Bot#readme",
+  "dependencies": {
+    "discord.js": "^12.5.1",
+    "request": "^2.81.0"
+  }
+}
