@@ -17,7 +17,6 @@
   },
   "homepage": "https://github.com/LSWarss/Sesja_Bot#readme",
   "dependencies": {
-    "discord.js": "^12.5.1",
-    "sqlite3": "^5.0.1"
+    "discord.js": "^12.5.1"
   }
 }
