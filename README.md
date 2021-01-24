@@ -1,3 +1,3 @@
-# Sesja Bot 
+# Sesja Bot
 
-## In development !
+## In development
