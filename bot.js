@@ -53,6 +53,31 @@ client.on('message', msg => {
         if(primaryCommand == "sesja" && arguments[0] == "help") {
             helpCommand(arguments.splice(1), msg)
         }
+        if(primaryCommand == "sesja" && arguments[0] == "add") {
+            msg.channel.send("Started adding...")
+            console.log(arguments.length)
+            if(arguments.length == 5) {
+                exam = {subject: arguments[1], date: arguments[2] + " " + arguments[3], professor: arguments[4]}
+                client.setSesja.run(exam)
+                msg.channel.send("Added new exam for: " + exam.subject + " on: " + exam.date)
+            } else {
+                msg.channel.send("Unfortunately you didn't specify all arguments... please type in `#sesja help add` for guidance 🤖")
+            }
+        }
+        // if(primaryCommand == "sesja" && arguments[0] == "getAll") {
+        //     let examsLenght = client.getSesjaLenght.get()["count(*)"];
+        //     console.log(examsLenght)
+        //     for(i = 0; i < examsLenght; i++) {
+        //         let exam = client.getSesjaForId.get(String(i));
+        //         console.log(exam)
+        //         msg.channel.send("Exam from: " + exam.subject + " on: " + exam.date + " by: " + exam.professor)
+        //     }
+            
+        // }
+        if(primaryCommand == "sesja" && arguments[0] == "get") {
+            let exam = client.getSesjaForId.get(arguments[1]);
+            msg.channel.send("Exam you are looking for is: " + exam.subject + " on: " + exam.date + " by: " + exam.professor);
+        }
     }
 });
 
@@ -76,19 +101,20 @@ function createSesjaTable() {
         sql.pragma("synchronous = 1");
         sql.pragma("journal_mode = wal");
     }
+    client.getSesjaLenght = sql.prepare("SELECT count(*) FROM sesja;");
     client.getSesja = sql.prepare("SELECT * FROM sesja");
-    client.setSesja = sql.prepare("INSERT OR REPLACE INTO sesja (subject, date, professor) VALUES (@subject, @date, @professor)");
-    client.getSesjaForSubject = sql.prepare("SELECT * FROM sesja WHERE subject = ?");
-    client.getSesjaForProfessor = sql.prepare("SELECT * FROM sesja WHERE professor = ?")
+    client.setSesja = sql.prepare("INSERT OR REPLACE INTO sesja (subject, date, professor) VALUES (@subject, @date, @professor);");
+    client.getSesjaForSubject = sql.prepare("SELECT * FROM sesja WHERE subject = ?;");
+    client.getSesjaForId = sql.prepare("SELECT * FROM sesja WHERE id = ?;");
+    client.getSesjaForProfessor = sql.prepare("SELECT * FROM sesja WHERE professor = ?;");
 }
 
 function helpCommand(arguments, receivedMessage) {
     if(arguments.length == 0) {
         receivedMessage.channel.send("I'm not sure how can I help you. Try `#sesja help [topic]`");
     } else {
-        receivedMessage.channel.send("It seems that you need help with: " + arguments)
+        receivedMessage.channel.send("It seems that you need help with: " + arguments);
     }
 }
-
 
 client.login(process.env.BOT_TOKEN);
