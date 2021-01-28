@@ -10,6 +10,7 @@
     "type": "git",
     "url": "git+https://github.com/LSWarss/Sesja_Bot.git"
   },
+  "type":"module",
   "author": "LSWarss",
   "license": "ISC",
   "bugs": {
@@ -20,5 +21,8 @@
     "better-sqlite3": "^7.1.2",
     "discord.js": "^12.5.1",
     "node-gyp": "^3.8.0"
+  },
+  "devDependencies": {
+    "eslint": "^7.18.0"
   }
 }

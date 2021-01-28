@@ -1,18 +1,20 @@
-console.log('Beep beep 🦾 ')
+console.log('Beep beep 🦾 ');
+
+// IMPORTS
+import { Sesja } from "./sesja.js";
+import { Client } from 'discord.js';
+import SQLLite from "better-sqlite3";
 
 // CONSTANTS 
-const { Client, MessageEmbed } = require('discord.js');
 const client = new Client();
-const SQLLite = require("better-sqlite3")
-const sql = new SQLLite('./data/data.sqlite')
-
+const sql = new SQLLite('./data/data.sqlite');
+const sesja = new Sesja(sql, client);
 const replies = [
     "The Force will be with you. Always. ✨ ",
     "“I find your lack of faith disturbing. 🤖 ",
     "Now, young Skywalker, you will die. ⚡️ ", 
     "It's no use Anakin I have the high ground 🏔"
 ];
-
 const channels = {
     BOT_TESTING:"802931490019082300"
 }
@@ -20,7 +22,7 @@ const channels = {
 client.on('ready', () => {
     console.log('💙');
     createPointsTable();
-    createSesjaTable();
+    sesja.createSesjaTable();
 });
 
 client.on('message', msg => {
@@ -45,38 +47,41 @@ client.on('message', msg => {
         let fullCommand = msg.content.substr(1)
         let splitCommand = fullCommand.split(" ")
         let primaryCommand = splitCommand[0]
-        let arguments = splitCommand.slice(1)
+        let commandArguments = splitCommand.slice(1)
 
         if(primaryCommand == "sesja"){
-            console.log("Arguments are: " + arguments)
+            console.log("Arguments are: " + commandArguments)
         }
-        if(primaryCommand == "sesja" && arguments[0] == "help") {
-            helpCommand(arguments.splice(1), msg)
+        if(primaryCommand == "sesja" && commandArguments[0] == "help") {
+            helpCommand(commandArguments.splice(1), msg)
         }
-        if(primaryCommand == "sesja" && arguments[0] == "add") {
+        if(primaryCommand == "sesja" && commandArguments[0] == "add") {
             msg.channel.send("Started adding...")
-            console.log(arguments.length)
-            if(arguments.length == 5) {
-                exam = {subject: arguments[1], date: arguments[2] + " " + arguments[3], professor: arguments[4]}
-                client.setSesja.run(exam)
+            console.log(commandArguments.length)
+            if(commandArguments.length == 5) {
+                let exam = {subject: commandArguments[1], date: commandArguments[2] + " " + commandArguments[3], professor: commandArguments[4]}
+                sesja.client.setSesja.run(exam)
                 msg.channel.send("Added new exam for: " + exam.subject + " on: " + exam.date)
             } else {
                 msg.channel.send("Unfortunately you didn't specify all arguments... please type in `#sesja help add` for guidance 🤖")
             }
         }
-        // if(primaryCommand == "sesja" && arguments[0] == "getAll") {
-        //     let examsLenght = client.getSesjaLenght.get()["count(*)"];
-        //     console.log(examsLenght)
-        //     for(i = 0; i < examsLenght; i++) {
-        //         let exam = client.getSesjaForId.get(String(i));
-        //         console.log(exam)
-        //         msg.channel.send("Exam from: " + exam.subject + " on: " + exam.date + " by: " + exam.professor)
-        //     }
+        if(primaryCommand == "sesja" && commandArguments[0] == "getAll") {
+            const exams = sesja.client.getSesja;
+            msg.channel.send("Exams before you: ")
+            for (const exam of exams.iterate()) {
+                console.log(exam)
+                msg.channel.send("Subject: " + exam.subject + " when: " + exam.date + " by: " + exam.professor);
+            }
             
-        // }
-        if(primaryCommand == "sesja" && arguments[0] == "get") {
-            let exam = client.getSesjaForId.get(arguments[1]);
-            msg.channel.send("Exam you are looking for is: " + exam.subject + " on: " + exam.date + " by: " + exam.professor);
+        }
+        if(primaryCommand == "sesja" && commandArguments[0] == "get") {
+            let exam = sesja.client.getSesjaForId.get(commandArguments[1]);
+            if(exam === undefined) {
+                msg.channel.send("There is no exam for this id number");
+            } else {
+                msg.channel.send("Exam you are looking for is: " + exam.subject + " on: " + exam.date + " by: " + exam.professor);
+            }
         }
     }
 });
@@ -94,27 +99,15 @@ function createPointsTable() {
     client.setPoints = sql.prepare("INSERT OR REPLACE INTO points (id, user, points) VALUES (@id,@user,@points)");
 }
 
-function createSesjaTable() {
-    const table = sql.prepare("SELECT count(*) FROM sqlite_master WHERE type='table' AND name = 'sesja';").get();
-    if(!table['count(*)']) {
-        sql.prepare("CREATE TABLE sesja (id INTEGER PRIMARY KEY AUTOINCREMENT, subject TEXT, date TEXT, professor TEXT);").run();
-        sql.pragma("synchronous = 1");
-        sql.pragma("journal_mode = wal");
-    }
-    client.getSesjaLenght = sql.prepare("SELECT count(*) FROM sesja;");
-    client.getSesja = sql.prepare("SELECT * FROM sesja");
-    client.setSesja = sql.prepare("INSERT OR REPLACE INTO sesja (subject, date, professor) VALUES (@subject, @date, @professor);");
-    client.getSesjaForSubject = sql.prepare("SELECT * FROM sesja WHERE subject = ?;");
-    client.getSesjaForId = sql.prepare("SELECT * FROM sesja WHERE id = ?;");
-    client.getSesjaForProfessor = sql.prepare("SELECT * FROM sesja WHERE professor = ?;");
-}
 
-function helpCommand(arguments, receivedMessage) {
-    if(arguments.length == 0) {
+
+function helpCommand(commandArgs, receivedMessage) {
+    if(commandArgs.length == 0) {
         receivedMessage.channel.send("I'm not sure how can I help you. Try `#sesja help [topic]`");
     } else {
-        receivedMessage.channel.send("It seems that you need help with: " + arguments);
+        receivedMessage.channel.send("It seems that you need help with: " + commandArgs);
     }
 }
 
+// eslint-disable-next-line no-undef
 client.login(process.env.BOT_TOKEN);
