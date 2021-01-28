@@ -49,15 +49,15 @@ client.on('message', msg => {
         let primaryCommand = splitCommand[0]
         let commandArguments = splitCommand.slice(1)
 
-        if(primaryCommand == "sesja"){
-            console.log("Arguments are: " + commandArguments)
-        }
+        
+        if(primaryCommand == "sesja" && commandArguments.length == 0) {
+            msg.channel.send("You haven't specified any arguments, if you want to list of available commands type in `#sesja help`")
+        }   
         if(primaryCommand == "sesja" && commandArguments[0] == "help") {
-            helpCommand(commandArguments.splice(1), msg)
+            sesja.helpCommand(commandArguments.splice(1), msg)
         }
         if(primaryCommand == "sesja" && commandArguments[0] == "add") {
             msg.channel.send("Started adding...")
-            console.log(commandArguments.length)
             if(commandArguments.length == 5) {
                 let exam = {subject: commandArguments[1], date: commandArguments[2] + " " + commandArguments[3], professor: commandArguments[4]}
                 sesja.client.setSesja.run(exam)
@@ -73,15 +73,12 @@ client.on('message', msg => {
                 console.log(exam)
                 msg.channel.send("Subject: " + exam.subject + " when: " + exam.date + " by: " + exam.professor);
             }
-            
         }
         if(primaryCommand == "sesja" && commandArguments[0] == "get") {
-            let exam = sesja.client.getSesjaForId.get(commandArguments[1]);
-            if(exam === undefined) {
-                msg.channel.send("There is no exam for this id number");
-            } else {
-                msg.channel.send("Exam you are looking for is: " + exam.subject + " on: " + exam.date + " by: " + exam.professor);
-            }
+            sesja.getCommandById(commandArguments, msg)
+        }
+        if(primaryCommand == "sesja" && commandArguments[0] == "delete") {
+            sesja.deleteCommandById(commandArguments, msg)
         }
     }
 });
@@ -101,13 +98,7 @@ function createPointsTable() {
 
 
 
-function helpCommand(commandArgs, receivedMessage) {
-    if(commandArgs.length == 0) {
-        receivedMessage.channel.send("I'm not sure how can I help you. Try `#sesja help [topic]`");
-    } else {
-        receivedMessage.channel.send("It seems that you need help with: " + commandArgs);
-    }
-}
+
 
 // eslint-disable-next-line no-undef
 client.login(process.env.BOT_TOKEN);

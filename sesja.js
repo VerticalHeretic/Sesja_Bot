@@ -18,6 +18,35 @@ class Sesja {
         this.client.getSesjaForSubject = this.sql.prepare("SELECT * FROM sesja WHERE subject = ?;");
         this.client.getSesjaForId = this.sql.prepare("SELECT * FROM sesja WHERE id = ?;");
         this.client.getSesjaForProfessor = this.sql.prepare("SELECT * FROM sesja WHERE professor = ?;");
+        this.client.deleteExamForId = this.sql.prepare("DELETE FROM sesja WHERE id = ?;");
+
+    }
+
+    helpCommand(commandArgs, receivedMessage) {
+        if(commandArgs.length == 0) {
+            receivedMessage.channel.send("I'm not sure how can I help you. Try `#sesja help [topic]`");
+        } else {
+            receivedMessage.channel.send("It seems that you need help with: " + commandArgs);
+        }
+    }
+
+    getCommandById(commandArgs, receivedMessage){
+        let exam = this.client.getSesjaForId.get(commandArgs[1]);
+            if(exam === undefined) {
+                receivedMessage.channel.send("There is no exam for this id number");
+            } else {
+                receivedMessage.channel.send("Exam you are looking for is: " + exam.subject + " on: " + exam.date + " by: " + exam.professor);
+            }
+    }
+
+    deleteCommandById(commandArgs, receivedMessage) {
+        let exam = this.client.getSesjaForId.get(commandArgs[1]);
+        if (exam === undefined) {
+            receivedMessage.channel.send("There is no exam for this id number");
+        } else {
+            this.client.deleteExamForId.run(commandArgs[1]);
+            receivedMessage.channel.send("Exam you have just deleted was: " + exam.subject + " on: " + exam.date + " by: " + exam.professor);
+        }
     }
 
 }
