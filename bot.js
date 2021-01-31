@@ -54,17 +54,10 @@ client.on('message', msg => {
             msg.channel.send("You haven't specified any arguments, if you want to list of available commands type in `#sesja help`")
         }   
         if(primaryCommand == "sesja" && commandArguments[0] == "help") {
-            sesja.helpCommand(commandArguments.splice(1), msg)
+            sesja.helpCommand(commandArguments, msg)
         }
         if(primaryCommand == "sesja" && commandArguments[0] == "add") {
-            msg.channel.send("Started adding...")
-            if(commandArguments.length == 5) {
-                let exam = {subject: commandArguments[1], date: commandArguments[2] + " " + commandArguments[3], professor: commandArguments[4]}
-                sesja.client.setSesja.run(exam)
-                msg.channel.send("Added new exam for: " + exam.subject + " on: " + exam.date)
-            } else {
-                msg.channel.send("Unfortunately you didn't specify all arguments... please type in `#sesja help add` for guidance 🤖")
-            }
+           sesja.addCommand(commandArguments, msg)
         }
         if(primaryCommand == "sesja" && commandArguments[0] == "getAll") {
             const exams = sesja.client.getSesja;

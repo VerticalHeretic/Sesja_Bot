@@ -1,3 +1,5 @@
+import { MessageEmbed } from "discord.js";
+
 class Sesja {
 
     constructor(sql, client) {
@@ -23,11 +25,35 @@ class Sesja {
     }
 
     helpCommand(commandArgs, receivedMessage) {
-        if(commandArgs.length == 0) {
+        if(commandArgs.length === 0) {
             receivedMessage.channel.send("I'm not sure how can I help you. Try `#sesja help [topic]`");
+        } else if(commandArgs[1] === "add") {
+            receivedMessage.channel.send("This command is used for adding new exams to the list. To add new exam you need to type in: `#sesja add [name of subject] [date (YYYY-MM-DD HH:MM.)] [professor]` ");
+        } else if(commandArgs[1] === "get") {
+            receivedMessage.channel.send("This command is used for getting exams by (id, date, professor and subject). To use it just type in: `#sesja get [id || subject || professor || date]` ");
+        } else if(commandArgs[1] === "getAll") {
+            receivedMessage.channel.send("This command is used for getting all exams still before you. To use it just type in: `#sesja getAll` ");
+        } else if(commandArgs[1] === "delete") {
+            receivedMessage.channel.send("This command is used for deleting exams from the list. To use it just type in: `#sesja delete [id]`");
         } else {
-            receivedMessage.channel.send("It seems that you need help with: " + commandArgs);
+            receivedMessage.channel.send("Unfortunately you have misspelled the command or I don't know that command yet. Here is what I know: ");
+            const helpEmbedMessage = new MessageEmbed()
+                .setColor('#fca4f7')
+                .setTitle('Sesja Bot Help')
+                .setURL('Sesja Bot', 'https://github.com/LSWarss/Sesja_Bot')
+                .setDescription('Simple exam menagment bot, for students and them alike.')
+                .addFields(
+                    { name: "#sejsa add", value: "To add new exam you need to type in: `#sesja add [name of subject] [date (YYYY-MM-DD HH:MM.)] [professor]`" },
+                    { name: "#sejsa get", value: "To get exam it just type in: `#sesja get [id || subject || professor || date]`" },
+                    { name: "#sejsa getAll", value: "To get all exams just type in: `#sesja getAll`" },
+                    { name: "#sejsa delete", value: "To delete exam just type in: `#sesja delete [id]`" },
+                    { name: "Force", value: "Returns random STAR WARS quote"},
+                    { name: "Points", value: "Returns your current number of points"}
+                )
+                .setTimestamp()
+                .setFooter('Thanks for using my bot 🤘🏻', 'https://github.com/LSWarss');
         }
+
     }
 
     getCommandById(commandArgs, receivedMessage){
@@ -47,6 +73,18 @@ class Sesja {
             this.client.deleteExamForId.run(commandArgs[1]);
             receivedMessage.channel.send("Exam you have just deleted was: " + exam.subject + " on: " + exam.date + " by: " + exam.professor);
         }
+    }
+
+    addCommand(commandArgs, receivedMessage){
+        receivedMessage.channel.send("Started adding...");
+        if(commandArgs.length == 5) {
+            let exam = {subject: commandArguments[1], date: commandArguments[2] + " " + commandArguments[3], professor: commandArguments[4]}
+            this.client.setSesja.run(exam);
+            receivedMessage.channel.send("Added new exam for: " + exam.subject + " on: " + exam.date);
+        } else {
+            receivedMessage.channel.send("Unfortunately you didn't specify all arguments... please type in `#sesja help add` for guidance 🤖");
+        }
+
     }
 
 }
