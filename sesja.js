@@ -52,6 +52,7 @@ class Sesja {
                 )
                 .setTimestamp()
                 .setFooter('Thanks for using my bot 🤘🏻', 'https://github.com/LSWarss');
+            receivedMessage.channel.send(helpEmbedMessage);
         }
 
     }
