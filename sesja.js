@@ -39,7 +39,8 @@ class Sesja {
             receivedMessage.channel.send("Unfortunately you have misspelled the command or I don't know that command yet. Here is what I know: ");
             const helpEmbedMessage = new MessageEmbed()
                 .setTitle('Sesja Bot Help')
-                .setURL('Sesja Bot', 'https://github.com/LSWarss/Sesja_Bot')
+                .setURL('https://github.com/LSWarss/Sesja_Bot')
+                .setAuthor('LSWarss - Łukasz Stachnik', 'https://avatars.githubusercontent.com/u/31141451?s=400&u=15f7504791ee68956023d659b0f28dfd9d2fb0db&v=4', 'https://github.com/LSWarss')
                 .setDescription('Simple exam menagment bot, for students and them alike.')
                 .addFields(
                     { name: '#sejsa add', value: 'To add new exam you need to type in: `#sesja add [name of subject] [date (YYYY-MM-DD HH:MM.)] [professor]`' },
@@ -50,7 +51,7 @@ class Sesja {
                     { name: 'Points', value: 'Returns your current number of points'}
                 )
                 .setTimestamp()
-                .setFooter('Thanks for using my bot 🤘🏻', 'https://github.com/LSWarss');
+                .setFooter('Thanks for using my bot 🤘🏻');
             const exampleEmbed = new MessageEmbed().setTitle('Some title');
             receivedMessage.channel.send(helpEmbedMessage);
         }
