@@ -1,6 +1,6 @@
 {
   "name": "sesja_bot",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "Discord bot to manage studies",
   "main": "bot.js",
   "scripts": {
@@ -10,7 +10,7 @@
     "type": "git",
     "url": "git+https://github.com/LSWarss/Sesja_Bot.git"
   },
-  "type":"module",
+  "type": "module",
   "author": "LSWarss",
   "license": "ISC",
   "bugs": {

@@ -79,7 +79,7 @@ class Sesja {
     addCommand(commandArgs, receivedMessage){
         receivedMessage.channel.send("Started adding...");
         if(commandArgs.length == 5) {
-            let exam = {subject: commandArguments[1], date: commandArguments[2] + " " + commandArguments[3], professor: commandArguments[4]}
+            let exam = {subject: commandArgs[1], date: commandArgs[2] + " " + commandArgs[3], professor: commandArgs[4]}
             this.client.setSesja.run(exam);
             receivedMessage.channel.send("Added new exam for: " + exam.subject + " on: " + exam.date);
         } else {
