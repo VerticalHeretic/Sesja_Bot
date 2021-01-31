@@ -38,7 +38,6 @@ class Sesja {
         } else {
             receivedMessage.channel.send("Unfortunately you have misspelled the command or I don't know that command yet. Here is what I know: ");
             const helpEmbedMessage = new MessageEmbed()
-                .setColor('#fca4f7')
                 .setTitle('Sesja Bot Help')
                 .setURL('Sesja Bot', 'https://github.com/LSWarss/Sesja_Bot')
                 .setDescription('Simple exam menagment bot, for students and them alike.')
@@ -53,7 +52,7 @@ class Sesja {
                 .setTimestamp()
                 .setFooter('Thanks for using my bot 🤘🏻', 'https://github.com/LSWarss');
             const exampleEmbed = new MessageEmbed().setTitle('Some title');
-            receivedMessage.channel.send(exampleEmbed);
+            receivedMessage.channel.send(helpEmbedMessage);
         }
 
     }
